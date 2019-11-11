@@ -7,7 +7,7 @@ def read_data(filename):
             traindata.append(row)
         return(traindata)
 def finds(): #function for finding maximally specific set
-    dataarr=read_data('ENJOYSPORT.csv')
+    dataarr=read_data("ENJOYSPORT.csv")
     h=['0','0','0','0','0','0']
     rows=len(dataarr)
     columns=7
