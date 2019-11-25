@@ -2,25 +2,30 @@ import numpy as np
 import math
 import csv
 #from dataloader import read_data
+
+
 def read_data(filename):
-     with open(filename,'r') as csvfile:
-        datareader = csv.reader(csvfile,delimiter=',')
+     with open(filename, 'r') as csvfile:
+        datareader = csv.reader(csvfile, delimiter=',')
         headers = next(datareader)
-        metadata=[]
-        traindata=[]
+        metadata = []
+        traindata = []
         for name in headers:
             metadata.append(name)
         for row in datareader:
             traindata.append(row)
-     return(metadata,traindata)
+     return(metadata, traindata)
+
 
 class Node:
     def __init__(self, attribute):
         self.attribute = attribute
         self.children = []
         self.answer = ""
+
     def __str__(self):
         return self.attribute
+
 
 def subtables(data, col, delete):
     dict = {}
@@ -41,6 +46,7 @@ def subtables(data, col, delete):
             dict[items[x]] = np.delete(dict[items[x]], col, 1)
     return items, dict
 
+
 def entropy(S):
     items = np.unique(S)
     if items.size == 1:
@@ -52,6 +58,7 @@ def entropy(S):
     for count in counts:
         sums += -1 * count * math.log(count, 2)
     return sums
+
 
 def gain_ratio(data, col):
     items, dict = subtables(data, col, delete=False)
@@ -67,6 +74,7 @@ def gain_ratio(data, col):
     for x in range(entropies.shape[0]):
         total_entropy -= entropies[x]
     return total_entropy / iv
+
 
 def create_node(data, metadata):
     if (np.unique(data[:, -1])).shape[0] == 1:
@@ -85,11 +93,13 @@ def create_node(data, metadata):
         node.children.append((items[x], child))
     return node
 
+
 def empty(size):
     s = ""
     for x in range(size):
         s += "\t"
     return s
+
 
 def print_tree(node, level):
     if node.answer != "":
@@ -99,6 +109,7 @@ def print_tree(node, level):
     for value, n in node.children:
         print(empty(level + 1), value)
         print_tree(n, level + 2)
+
 
 metadata, traindata = read_data("tennis.csv")
 data = np.array(traindata)
